@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useMemo } from 'react';
+import { supabase } from '@/lib/supabase';
 import { Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -163,7 +164,25 @@ import {
           });
         }
   
-        await createBusinessFormation(formationData);
+        const { data, error } = await supabase
+          .from('business_formations')
+          .insert({
+            entity_name: formationData.entityName,
+            entity_address: formationData.entityAddress,
+            service_product_offered: formationData.serviceProductOffered,
+            entity_type: formationData.entityType,
+            expedite: formationData.expedite,
+            owners: formationData.owners,
+            signatures: formationData.signatures,
+            user_id: (await supabase.auth.getSession()).data.session?.user.id,
+            status: 'pending'
+          })
+          .select();
+
+        if (error) {
+          throw error;
+        }
+
         alert('Business formation submitted successfully!');
       } catch (error) {
         console.error('Error submitting form:', error);
