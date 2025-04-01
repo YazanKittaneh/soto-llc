@@ -33,6 +33,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { NewBusinessFormation } from '@/types/llc';
 
  
   const formSchema = z.object({
