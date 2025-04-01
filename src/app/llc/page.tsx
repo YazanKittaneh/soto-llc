@@ -37,15 +37,11 @@ import { NewBusinessFormation } from '@/types/llc';
 
  
   const formSchema = z.object({
-    entityInformation: z.object({
-      entityName: z.string().min(1, { message: "Entity name is required" }),
-      entityAddress: z.string().min(1, { message: "Entity address is required" }),
-      serviceProductOffered: z.string().min(1, { message: "Service/product offered is required" }),
-      entityType: z.enum(['LLC', 'S-CORP', 'C-CORP'] as const),
-    }),
-    processingOptions: z.object({
-      expedite: z.enum(['YES', 'NO'] as const),
-    }),
+    entityName: z.string().min(1, { message: "Entity name is required" }),
+    entityAddress: z.string().min(1, { message: "Entity address is required" }),
+    serviceProductOffered: z.string().min(1, { message: "Service/product offered is required" }),
+    entityType: z.enum(['LLC', 'S-CORP', 'C-CORP'] as const),
+    expedite: z.enum(['YES', 'NO'] as const),
     owners: z.array(
       z.object({
         fullName: z.string().min(1, { message: "Full name is required" }),
@@ -72,15 +68,11 @@ import { NewBusinessFormation } from '@/types/llc';
     const totalSteps = 4;
   
     const defaultValues: z.infer<typeof formSchema> = useMemo(() => ({
-      entityInformation: {
-        entityName: '',
-        entityAddress: '',
-        serviceProductOffered: '',
-        entityType: 'LLC' as const,
-      },
-      processingOptions: {
-        expedite: 'NO',
-      },
+      entityName: '',
+      entityAddress: '',
+      serviceProductOffered: '',
+      entityType: 'LLC' as const,
+      expedite: 'NO',
       owners: [{
         fullName: '',
         address: '',
@@ -109,11 +101,11 @@ import { NewBusinessFormation } from '@/types/llc';
   
         // Transform form data to match our schema
         const formationData: NewBusinessFormation = {
-          entityName: data.entityInformation.entityName,
-          entityAddress: data.entityInformation.entityAddress,
-          serviceProductOffered: data.entityInformation.serviceProductOffered,
-          entityType: data.entityInformation.entityType,
-          expedite: data.processingOptions.expedite,
+          entityName: data.entityName,
+          entityAddress: data.entityAddress,
+          serviceProductOffered: data.serviceProductOffered,
+          entityType: data.entityType,
+          expedite: data.expedite,
           owners: data.owners,
           signatures: data.signatures
         };
@@ -196,7 +188,7 @@ import { NewBusinessFormation } from '@/types/llc';
                     
                     <FormField
                       control={form.control}
-                      name="entityInformation.entityName"
+                      name="entityName"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Entity Name</FormLabel>
@@ -213,7 +205,7 @@ import { NewBusinessFormation } from '@/types/llc';
                     
                     <FormField
                       control={form.control}
-                      name="entityInformation.entityAddress"
+                      name="entityAddress"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Entity Address</FormLabel>
@@ -227,7 +219,7 @@ import { NewBusinessFormation } from '@/types/llc';
                     
                     <FormField
                       control={form.control}
-                      name="entityInformation.serviceProductOffered"
+                      name="serviceProductOffered"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Service/Product Offered</FormLabel>
@@ -241,7 +233,7 @@ import { NewBusinessFormation } from '@/types/llc';
                     
                     <FormField
                       control={form.control}
-                      name="entityInformation.entityType"
+                      name="entityType"
                       render={({ field }) => (
                         <FormItem className="space-y-3">
                           <FormLabel>Entity Type</FormLabel>
@@ -284,7 +276,7 @@ import { NewBusinessFormation } from '@/types/llc';
                     
                     <FormField
                       control={form.control}
-                      name="processingOptions.expedite"
+                      name="expedite"
                       render={({ field }) => (
                         <FormItem className="space-y-3">
                           <FormLabel>Expedite Processing (24HR TURNAROUND)</FormLabel>
