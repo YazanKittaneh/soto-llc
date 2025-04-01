@@ -46,37 +46,25 @@ import { NewBusinessFormation } from '@/types/llc';
     processingOptions: z.object({
       expedite: z.enum(['YES', 'NO'] as const),
     }),
-    ownerInformation: z.object({
-      owner1: z.object({
-        responsibleParty: z.boolean().default(true),
+    owners: z.array(
+      z.object({
         fullName: z.string().min(1, { message: "Full name is required" }),
         address: z.string().min(1, { message: "Address is required" }),
         phone: z.string().min(10, { message: "Valid phone number is required" }),
         email: z.string().email({ message: "Valid email is required" }),
-        ssn: z.string().min(9, { message: "Valid SSN is required" }),
-        dob: z.string().min(1, { message: "Date of birth is required" }),
-      }),
-      owner2: z.object({
-        fullName: z.string().optional(),
-        address: z.string().optional(),
-        phone: z.string().optional(),
-        email: z.string().email({ message: "Valid email is required" }).optional(),
-      }).optional(),
-      owner3: z.object({
-        fullName: z.string().optional(),
-        address: z.string().optional(),
-        phone: z.string().optional(),
-        email: z.string().email({ message: "Valid email is required" }).optional(),
-      }).optional(),
-    }),
-    attestation: z.object({
-      signatures: z.array(
-        z.object({
-          signHere: z.string().optional(),
-          date: z.string().optional(),
-        })
-      ).optional(),
-    }),
+        ssn: z.string().min(9, { message: "Valid SSN is required" }).optional(),
+        dob: z.string().min(1, { message: "Date of birth is required" }).optional(),
+        responsibleParty: z.boolean().default(false),
+        ownerNumber: z.number().min(1),
+      })
+    ).min(1, { message: "At least one owner is required" }),
+    signatures: z.array(
+      z.object({
+        signHere: z.string().min(1, { message: "Signature is required" }),
+        date: z.string().min(1, { message: "Date is required" }),
+        signerNumber: z.number().min(1),
+      })
+    ).min(1, { message: "At least one signature is required" }),
   });
   
   export default function LlcPage() {
@@ -93,20 +81,21 @@ import { NewBusinessFormation } from '@/types/llc';
       processingOptions: {
         expedite: 'NO',
       },
-      ownerInformation: {
-        owner1: {
-          responsibleParty: true,
-          fullName: '',
-          address: '',
-          phone: '',
-          email: '',
-          ssn: '',
-          dob: '',
-        },
-      },
-      attestation: {
-        signatures: [{ signHere: '', date: '' }],
-      },
+      owners: [{
+        fullName: '',
+        address: '',
+        phone: '',
+        email: '',
+        ssn: '',
+        dob: '',
+        responsibleParty: true,
+        ownerNumber: 1,
+      }],
+      signatures: [{
+        signHere: '',
+        date: '',
+        signerNumber: 1,
+      }],
     }), []);
   
     const form = useForm<z.infer<typeof formSchema>>({
@@ -125,45 +114,9 @@ import { NewBusinessFormation } from '@/types/llc';
           serviceProductOffered: data.entityInformation.serviceProductOffered,
           entityType: data.entityInformation.entityType,
           expedite: data.processingOptions.expedite,
-          owners: [
-            {
-              fullName: data.ownerInformation.owner1.fullName,
-              address: data.ownerInformation.owner1.address,
-              phone: data.ownerInformation.owner1.phone,
-              email: data.ownerInformation.owner1.email,
-              ssn: data.ownerInformation.owner1.ssn,
-              dob: data.ownerInformation.owner1.dob,
-              responsibleParty: true,
-              ownerNumber: 1
-            }
-          ],
-          signatures: data.attestation.signatures?.map((sig, i) => ({
-            signHere: sig.signHere || '',
-            date: sig.date || '',
-            signerNumber: i + 1
-          }))
+          owners: data.owners,
+          signatures: data.signatures
         };
-  
-        // Add optional owners if they exist
-        if (data.ownerInformation.owner2?.fullName) {
-          formationData.owners.push({
-            fullName: data.ownerInformation.owner2.fullName,
-            address: data.ownerInformation.owner2.address || '',
-            phone: data.ownerInformation.owner2.phone || '',
-            email: data.ownerInformation.owner2.email || '',
-            ownerNumber: 2
-          });
-        }
-  
-        if (data.ownerInformation.owner3?.fullName) {
-          formationData.owners.push({
-            fullName: data.ownerInformation.owner3.fullName,
-            address: data.ownerInformation.owner3.address || '',
-            phone: data.ownerInformation.owner3.phone || '',
-            email: data.ownerInformation.owner3.email || '',
-            ownerNumber: 3
-          });
-        }
   
         const { data: result, error } = await supabase
           .from('business_formations')
