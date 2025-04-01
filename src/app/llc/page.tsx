@@ -165,7 +165,7 @@ import { NewBusinessFormation } from '@/types/llc';
           });
         }
   
-        const { data, error } = await supabase
+        const { data: result, error } = await supabase
           .from('business_formations')
           .insert({
             entity_name: formationData.entityName,
