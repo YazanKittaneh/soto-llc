@@ -48,6 +48,9 @@ const formSchema = z.object({
       signerNumber: z.number().min(1),
     })
   ).min(1, { message: "At least one signature is required" }),
+  preparerAcknowledged: z.boolean().refine(val => val === true, {
+    message: "You must acknowledge the preparer information",
+  }),
 });
 
 export default function LlcPage() {
@@ -76,6 +79,7 @@ export default function LlcPage() {
       date: '',
       signerNumber: 1,
     }],
+    preparerAcknowledged: false,
   }), []);
 
 
@@ -140,6 +144,9 @@ export default function LlcPage() {
         'owners'
       ];
     } else if (step === 3) {
+      fieldsToValidate = [
+        'preparerAcknowledged'
+      ];
 
     } else if (step === 4) {
       fieldsToValidate = [

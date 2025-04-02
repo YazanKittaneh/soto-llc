@@ -1,4 +1,7 @@
-export function PreparerInformationStep() {
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+
+export function PreparerInformationStep({ form }: { form: any }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Preparer Information</h2>
@@ -34,6 +37,27 @@ export function PreparerInformationStep() {
           <p className="text-sm"><span className="font-medium">CPA Fee:</span> $250</p>
         </div>
       </div>
+
+      <FormField
+        control={form.control}
+        name="preparerAcknowledged"
+        render={({ field }) => (
+          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <FormControl>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel>
+                I acknowledge that I have reviewed the preparer information and fee details above
+              </FormLabel>
+              <FormMessage />
+            </div>
+          </FormItem>
+        )}
+      />
     </div>
   );
 }
