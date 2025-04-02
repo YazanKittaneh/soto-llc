@@ -109,89 +109,87 @@ export default function LlcPage() {
 
 
 
+  const handleAuth = async (email: string) => {
+    const session = await supabase.auth.getSession();
+    const userId = session.data.session?.user.id;
+    
+    if (userId) return userId;
+
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', email)
+      .single();
+
+    if (existingUser) {
+      const shouldLogin = window.confirm(
+        `An account exists for ${email}. Would you like to sign in to link this submission to your account?`
+      );
+      if (shouldLogin) {
+        const { data: { session } } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/llc`,
+            queryParams: { login_hint: email }
+          }
+        });
+        return session?.user.id;
+      }
+    } else {
+      const shouldCreateAccount = window.confirm(
+        `Would you like to create an account with ${email} to track your submission?`
+      );
+      if (shouldCreateAccount) {
+        const { data: { session } } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/llc`,
+            queryParams: {
+              login_hint: email,
+              prompt: 'create'
+            }
+          }
+        });
+        return session?.user.id;
+      }
+    }
+    return null;
+  };
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const session = await supabase.auth.getSession();
-      const userId = session.data.session?.user.id;
-      
-      let primaryOwnerEmail = '';
-      primaryOwnerEmail = data.owners[0]?.email;
-
-      // Check if user exists by email if not logged in
-      if (!userId && primaryOwnerEmail) {
-        const { data: existingUser } = await supabase
-          .from('profiles')
-          .select('id')
-          .eq('email', primaryOwnerEmail)
-          .single();
-
-        if (existingUser) {
-          const shouldLogin = confirm(
-            `An account exists for ${primaryOwnerEmail}. Would you like to sign in to link this submission to your account?`
-          );
-          if (shouldLogin) {
-            // Redirect to login with return URL
-            await supabase.auth.signInWithOAuth({
-              provider: 'google',
-              options: {
-                redirectTo: `${window.location.origin}/llc`,
-                queryParams: {
-                  login_hint: primaryOwnerEmail
-                }
-              }
-            });
-            return;
-          }
-        } else {
-          const shouldCreateAccount = confirm(
-            `Would you like to create an account with ${primaryOwnerEmail} to track your submission?`
-          );
-          if (shouldCreateAccount) {
-            // Redirect to sign up
-            await supabase.auth.signInWithOAuth({
-              provider: 'google',
-              options: {
-                redirectTo: `${window.location.origin}/llc`,
-                queryParams: {
-                  login_hint: primaryOwnerEmail,
-                  prompt: 'create'
-                }
-              }
-            });
-            return;
-          }
-        }
-      }
+      const primaryOwnerEmail = data.owners[0]?.email;
+      const userId = primaryOwnerEmail 
+        ? await handleAuth(primaryOwnerEmail)
+        : (await supabase.auth.getSession()).data.session?.user.id;
 
       // Submit the form data
-      const formationData: NewBusinessFormation = {
-        entityName: data.entityName,
-        entityAddress: data.entityAddress,
-        serviceProductOffered: data.serviceProductOffered,
-        entityType: data.entityType,
+      const formationData = {
+        entity_name: data.entityName,
+        entity_address: data.entityAddress,
+        service_product_offered: data.serviceProductOffered,
+        entity_type: data.entityType,
         expedite: data.expedite,
         owners: data.owners,
-        signatures: data.signatures
+        signatures: data.signatures,
+        user_id: userId || null,
+        status: 'pending',
       };
 
-      const { data: result, error } = await supabase
+      const { error } = await supabase
         .from('business_formations')
-        .insert({
-          entity_name: formationData.entityName,
-          entity_address: formationData.entityAddress,
-          service_product_offered: formationData.serviceProductOffered,
-          entity_type: formationData.entityType,
-          expedite: formationData.expedite,
-          owners: formationData.owners,
-          signatures: formationData.signatures,
-          user_id: userId || null,
-          status: 'pending',
-        })
-        .select();
+        .insert(formationData);
 
       if (error) throw error;
 
-      //alert('Business formation submitted successfully!');
+      const confirmed = window.confirm(
+        'Business formation submitted successfully!\n\n' +
+        'Would you like to view your submissions?'
+      );
+      
+      if (confirmed) {
+        window.location.href = userId ? '/dashboard' : '/';
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Failed to submit business formation. Please try again.');
