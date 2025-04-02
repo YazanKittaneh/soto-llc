@@ -56,7 +56,10 @@ const formSchema = z.object({
 export default function LlcPage() {
   const [step, setStep] = useState(1);
   const [nextAvailable, setNextAvailable] = useState(false);
+
+
   const totalSteps = 4;
+  
 
   const defaultValues: z.infer<typeof formSchema> = useMemo(() => ({
     entityName: '',
@@ -89,7 +92,23 @@ export default function LlcPage() {
     mode: 'onBlur', // Change to onBlur to reduce validation frequency
   });
 
+  /** todo:   For future yazan: I am trying to figure out to check user log-in and allow them to sign up if they haven't */
+//   const getSessionId = async () => {
+//     try{
+//       await supabase.auth.getSession().then((result) => {
+//         if(result === null ){
+//         }
+//         return result.data.session.user.id
+//       })
+//   }
+//   catch(error: Error){
+//     console.error('Error submitting form:', error);
+//     alert('Failed to submit business formation. Please try again.');
+//   }
+// }
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+
     try {
 
       // Transform form data to match our schema
@@ -181,7 +200,7 @@ export default function LlcPage() {
               {/* All form fields must be inside this form element */}
               {step === 1 && <EntityInformationStep form={form} />}
               {step === 2 && <OwnerInformationStep form={form} />}
-              {step === 3 && <PreparerInformationStep />}
+              {step === 3 && <PreparerInformationStep form={form}  />}
               {step === 4 && <AttestationStep form={form} />}
 
               <FormNavigation
