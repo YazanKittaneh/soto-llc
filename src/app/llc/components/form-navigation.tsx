@@ -15,6 +15,7 @@ export function FormNavigation({
   nextStep: () => void;
   isValid: boolean;
   isSubmitting: boolean;
+  pendingSubmission?: boolean;
 }) {
   return (
     <div className="flex justify-between pt-4">
@@ -27,7 +28,7 @@ export function FormNavigation({
         <Button
           type="button"
           onClick={nextStep}
-          disabled={false}
+          disabled={!isValid || isSubmitting}
         >
           Next
         </Button>
@@ -35,11 +36,12 @@ export function FormNavigation({
         <Button
           type="submit"
           disabled={isSubmitting}
+          className="min-w-[150px]"
         >
           {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Submitting...
+              {pendingSubmission ? 'Completing Submission...' : 'Submitting...'}
             </>
           ) : (
             'Submit Application'
