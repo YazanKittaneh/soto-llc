@@ -1,6 +1,6 @@
-# Next.js Fullstack Starter
+# soto-accounting-llc-form
 
-A modern, production-ready template for building full-stack web applications with Next.js 15, React 19, Tailwind CSS 4, and Supabase.
+A form for user to submit infomration to create an LLC
 
 ## 🚀 Tech Stack
 

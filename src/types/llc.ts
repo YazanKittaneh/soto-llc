@@ -50,7 +50,7 @@ declare global {
             service_product_offered: string;
             entity_type: EntityType;
             expedite: ExpediteOption;
-            owners: Json;
+            owners: BusinessOwner;
             signatures: Json | null;
             user_id: string;
             status: 'pending' | 'processing' | 'completed' | 'rejected';
@@ -64,7 +64,7 @@ declare global {
             service_product_offered: string;
             entity_type: EntityType;
             expedite: ExpediteOption;
-            owners: Json;
+            owners: BusinessOwner;
             signatures?: Json | null;
             user_id: string;
             status?: 'pending' | 'processing' | 'completed' | 'rejected';
@@ -78,7 +78,7 @@ declare global {
             service_product_offered?: string;
             entity_type?: EntityType;
             expedite?: ExpediteOption;
-            owners?: Json;
+            owners?: BusinessOwner;
             signatures?: Json | null;
             user_id?: string;
             status?: 'pending' | 'processing' | 'completed' | 'rejected';

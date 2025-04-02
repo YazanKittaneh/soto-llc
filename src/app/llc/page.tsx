@@ -37,7 +37,7 @@ const formSchema = z.object({
       email: z.string().email({ message: "Valid email is required" }),
       ssn: z.string().min(9, { message: "Valid SSN is required" }).optional(),
       dob: z.string().min(1, { message: "Date of birth is required" }).optional(),
-      responsibleParty: z.boolean().default(false),
+      responsibleParty: z.boolean().optional().default(false),
       ownerNumber: z.number().min(1),
     })
   ).min(1, { message: "At least one owner is required" }),
@@ -52,6 +52,7 @@ const formSchema = z.object({
 
 export default function LlcPage() {
   const [step, setStep] = useState(1);
+  const [nextAvailable, setNextAvailable] = useState(false);
   const totalSteps = 4;
 
   const defaultValues: z.infer<typeof formSchema> = useMemo(() => ({
@@ -77,8 +78,9 @@ export default function LlcPage() {
     }],
   }), []);
 
+
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema) as any,
     defaultValues,
     mode: 'onBlur', // Change to onBlur to reduce validation frequency
   });
@@ -131,15 +133,15 @@ export default function LlcPage() {
       fieldsToValidate = [
         'entityName',
         'entityAddress',
-        'serviceProductOffered',
-        'entityType',
-        'expedite'
+        'serviceProductOffered'
       ];
     } else if (step === 2) {
       fieldsToValidate = [
         'owners'
       ];
     } else if (step === 3) {
+
+    } else if (step === 4) {
       fieldsToValidate = [
         'signatures'
       ];
@@ -147,12 +149,14 @@ export default function LlcPage() {
 
     const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
-      setStep(prev => Math.min(prev + 1, totalSteps));
+      console.log("PREV PAGE IS:", step)
+      setNextAvailable(isValid)
+      setStep(prev => prev + 1);
     }
   };
 
   const prevStep = () => {
-    setStep(prev => Math.max(prev - 1, 1));
+    setStep(prev => (prev - 1)<1?(prev - 1):1);
   };
 
   return (
@@ -178,7 +182,7 @@ export default function LlcPage() {
                 totalSteps={totalSteps}
                 prevStep={prevStep}
                 nextStep={nextStep}
-                isValid={form.formState.isValid}
+                isValid={nextAvailable}
                 isSubmitting={form.formState.isSubmitting}
               />
             </form>

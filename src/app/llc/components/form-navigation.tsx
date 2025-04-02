@@ -23,11 +23,11 @@ export function FormNavigation({
           Previous
         </Button>
       )}
-      {step < totalSteps ? (
+      {step <= totalSteps ? (
         <Button
           type="button"
           onClick={nextStep}
-          disabled={!isValid}
+          disabled={false}
         >
           Next
         </Button>

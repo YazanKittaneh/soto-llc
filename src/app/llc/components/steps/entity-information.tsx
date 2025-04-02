@@ -1,3 +1,5 @@
+"use client";
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,7 +17,7 @@ export function EntityInformationStep({ form }: { form: any }) {
           <FormItem>
             <FormLabel>Entity Name</FormLabel>
             <FormControl>
-              <Input placeholder="Enter entity name" {...field} />
+              <Textarea placeholder="Enter entity name" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -43,7 +45,7 @@ export function EntityInformationStep({ form }: { form: any }) {
           <FormItem>
             <FormLabel>Service/Product Offered</FormLabel>
             <FormControl>
-              <Input placeholder="Describe your service or product" {...field} />
+              <Textarea placeholder="Describe your service or product" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
