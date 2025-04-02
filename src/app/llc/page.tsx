@@ -126,31 +126,18 @@ export default function LlcPage() {
         `An account exists for ${email}. Would you like to sign in to link this submission to your account?`
       );
       if (shouldLogin) {
-        const { data } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: `${window.location.origin}/llc`,
-            queryParams: { login_hint: email }
-          }
-        });
-        return data.provideruser.id;
+        // Redirect to login page with return URL
+        window.location.href = `/login?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
+        return null;
       }
     } else {
       const shouldCreateAccount = window.confirm(
         `Would you like to create an account with ${email} to track your submission?`
       );
       if (shouldCreateAccount) {
-        const { data: { session } } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: `${window.location.origin}/llc`,
-            queryParams: {
-              login_hint: email,
-              prompt: 'create'
-            }
-          }
-        });
-        return session?.user.id;
+        // Redirect to signup page with email prefilled
+        window.location.href = `/signup?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
+        return null;
       }
     }
     return null;

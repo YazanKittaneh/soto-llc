@@ -40,6 +40,23 @@ export default function SignUpPage() {
         throw error;
       }
 
+      // Redirect to original URL or show success message
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirectUrl = searchParams.get('redirect');
+      
+      if (redirectUrl) {
+        // If user came from a redirect, log them in immediately after signup
+        const { error: loginError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (!loginError) {
+          router.push(redirectUrl);
+          return;
+        }
+      }
+
       setMessage('Check your email for the confirmation link');
     } catch (error: any) {
       setError(error.message || 'An error occurred during sign up');
