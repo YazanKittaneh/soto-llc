@@ -108,10 +108,58 @@ export default function LlcPage() {
 // }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-
     try {
+      const session = await supabase.auth.getSession();
+      const userId = session.data.session?.user.id;
+      const primaryOwnerEmail = data.owners[0].email;
 
-      // Transform form data to match our schema
+      // Check if user exists by email if not logged in
+      if (!userId) {
+        const { data: existingUser } = await supabase
+          .from('profiles')
+          .select('id')
+          .eq('email', primaryOwnerEmail)
+          .single();
+
+        if (existingUser) {
+          const shouldLogin = confirm(
+            `An account exists for ${primaryOwnerEmail}. Would you like to sign in to link this submission to your account?`
+          );
+          if (shouldLogin) {
+            // Redirect to login with return URL
+            await supabase.auth.signInWithOAuth({
+              provider: 'google',
+              options: {
+                redirectTo: `${window.location.origin}/llc`,
+                queryParams: {
+                  login_hint: primaryOwnerEmail
+                }
+              }
+            });
+            return;
+          }
+        } else {
+          const shouldCreateAccount = confirm(
+            `Would you like to create an account with ${primaryOwnerEmail} to track your submission?`
+          );
+          if (shouldCreateAccount) {
+            // Redirect to sign up
+            await supabase.auth.signInWithOAuth({
+              provider: 'google',
+              options: {
+                redirectTo: `${window.location.origin}/llc`,
+                queryParams: {
+                  login_hint: primaryOwnerEmail,
+                  prompt: 'create'
+                }
+              }
+            });
+            return;
+          }
+        }
+      }
+
+      // Submit the form data
       const formationData: NewBusinessFormation = {
         entityName: data.entityName,
         entityAddress: data.entityAddress,
@@ -132,14 +180,13 @@ export default function LlcPage() {
           expedite: formationData.expedite,
           owners: formationData.owners,
           signatures: formationData.signatures,
-          user_id: (await supabase.auth.getSession()).data.session?.user.id,
-          status: 'pending'
+          user_id: userId || null,
+          status: 'pending',
+          contact_email: primaryOwnerEmail
         })
         .select();
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       alert('Business formation submitted successfully!');
     } catch (error) {
