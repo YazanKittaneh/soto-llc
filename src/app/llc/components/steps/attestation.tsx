@@ -1,11 +1,17 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
 export function AttestationStep({ form }: { form: any }) {
   const [submitting, setSubmitting] = useState(false)
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {submitting && (
+        <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      )}
       <h2 className="text-xl font-semibold">Attestation</h2>
 
       <div className="bg-gray-50 p-4 rounded-md">
