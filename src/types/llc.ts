@@ -1,4 +1,5 @@
-import { Json, Tables, InsertTables } from './supabase';
+import { Tables, InsertTables } from './supabase';
+import { Json } from '@/types/common';
 
 export type EntityType = 'LLC' | 'S-CORP' | 'C-CORP';
 export type ExpediteOption = 'YES' | 'NO';

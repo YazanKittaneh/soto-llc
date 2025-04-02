@@ -79,6 +79,14 @@ export interface CardProps extends WithClassName {
 // Responsive props
 export type Breakpoint = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
+export type Json = 
+  | string 
+  | number 
+  | boolean 
+  | null 
+  | { [key: string]: Json | undefined } 
+  | Json[];
+
 export type ResponsiveValue<T> = T | Partial<Record<Breakpoint, T>>;
 
 // Common layout props
