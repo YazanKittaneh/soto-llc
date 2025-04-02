@@ -21,6 +21,8 @@ import { OwnerInformationStep } from './components/steps/owner-information';
 import { PreparerInformationStep } from './components/steps/preparer-information';
 import { AttestationStep } from './components/steps/attestation';
 import { FormNavigation } from './components/form-navigation';
+import { Dialog } from '@radix-ui/react-dialog';
+import LoginPage from '../(auth)/login/page';
 
 
 const formSchema = z.object({
@@ -136,19 +138,26 @@ export default function LlcPage() {
       );
       if (shouldCreateAccount) {
         // Redirect to signup page with email prefilled
-        window.location.href = `/signup?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
-        return null;
+        return (
+          <>
+          <Dialog>
+            <LoginPage></LoginPage>
+          </Dialog>
+          </>
+        )
+        //window.location.href = `/signup?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
+        //return null;
       }
     }
     return null;
   };
 
+
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const primaryOwnerEmail = data.owners[0]?.email;
-      const userId = primaryOwnerEmail 
-        ? await handleAuth(primaryOwnerEmail)
-        : (await supabase.auth.getSession()).data.session?.user.id;
+      const userId = await (await supabase.auth.getSession()).data.session?.user.id;
 
       // Submit the form data
       const formationData = {
@@ -169,17 +178,17 @@ export default function LlcPage() {
 
       if (error) throw error;
 
-      const confirmed = window.confirm(
-        'Business formation submitted successfully!\n\n' +
-        'Would you like to view your submissions?'
-      );
+      // const confirmed = window.confirm(
+      //   'Business formation submitted successfully!\n\n' +
+      //   'Would you like to view your submissions?'
+      // );
       
-      if (confirmed) {
-        window.location.href = userId ? '/dashboard' : '/';
-      }
+      // if (confirmed) {
+      //   window.location.href = userId ? '/dashboard' : '/';
+      // }
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert('Failed to submit business formation. Please try again.');
+      //alert('Failed to submit business formation. Please try again
     }
   };
 
@@ -239,6 +248,7 @@ export default function LlcPage() {
               {step === 4 && <AttestationStep form={form} />}
 
               <FormNavigation
+              
                 step={step}
                 totalSteps={totalSteps}
                 prevStep={prevStep}

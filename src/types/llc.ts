@@ -66,7 +66,7 @@ declare global {
             expedite: ExpediteOption;
             owners: BusinessOwner;
             signatures?: Json | null;
-            user_id: string;
+            user_id?: string;
             status?: 'pending' | 'processing' | 'completed' | 'rejected';
           };
           Update: {

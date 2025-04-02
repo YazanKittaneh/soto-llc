@@ -7,15 +7,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { supabase } from '@/lib/supabase';
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-export interface FormNavigationRef {
-  openLoginDialog: () => void;
-}
-
-export const FormNavigation = forwardRef<FormNavigationRef, {
+export function FormNavigation({
   step,
   totalSteps,
   prevStep,
@@ -29,34 +22,17 @@ export const FormNavigation = forwardRef<FormNavigationRef, {
   nextStep: () => void;
   isValid: boolean;
   isSubmitting: boolean;
-}>((props, ref) => {
-  const {
-    step,
-    totalSteps,
-    prevStep,
-    nextStep,
-    isValid,
-    isSubmitting,
-  } = props;
-  
-  const dialogTriggerRef = useRef<HTMLButtonElement>(null);
-
-  useImperativeHandle(ref, () => ({
-    openLoginDialog: () => {
-      dialogTriggerRef.current?.click();
-    }
-  }));
+}) {
   return (
     <div className="flex justify-between pt-4 gap-4">
       <Dialog>
-        <DialogTrigger ref={dialogTriggerRef} asChild>
+        <DialogTrigger asChild>
           <Button variant="outline">Login</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Login</DialogTitle>
           </DialogHeader>
-          <LoginForm />
         </DialogContent>
       </Dialog>
       {step > 1 && (
@@ -91,51 +67,3 @@ export const FormNavigation = forwardRef<FormNavigationRef, {
   );
 }
 
-function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleLogin} className="space-y-4">
-      <Input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <Input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      {error && <p className="text-red-500 text-sm">{error}</p>}
-      <Button type="submit" disabled={loading} className="w-full">
-        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Login'}
-      </Button>
-    </form>
-  );
-}
