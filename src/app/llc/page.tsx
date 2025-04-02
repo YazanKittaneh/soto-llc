@@ -138,24 +138,23 @@ export default function LlcPage() {
 
   const nextStep = async () => {
     // Only validate fields for the current step
-    let fieldsToValidate: BusinessFormation[] = [];
+    let fieldsToValidate: (keyof z.infer<typeof formSchema>)[] = [];
 
     if (step === 1) {
       fieldsToValidate = [
-        'entityInformation.entityName',
-        'entityInformation.entityAddress',
-        'entityInformation.serviceProductOffered',
-        'entityInformation.entityType',
-        'processingOptions.expedite'
+        'entityName',
+        'entityAddress',
+        'serviceProductOffered',
+        'entityType',
+        'expedite'
       ];
     } else if (step === 2) {
       fieldsToValidate = [
-        'ownerInformation.owner1.fullName',
-        'ownerInformation.owner1.address',
-        'ownerInformation.owner1.phone',
-        'ownerInformation.owner1.email',
-        'ownerInformation.owner1.ssn',
-        'ownerInformation.owner1.dob'
+        'owners'
+      ];
+    } else if (step === 3) {
+      fieldsToValidate = [
+        'signatures'
       ];
     }
 
@@ -314,225 +313,127 @@ export default function LlcPage() {
               {step === 2 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold">Owner Information</h2>
+                  
+                  {form.watch('owners').map((owner, index) => (
+                    <Accordion key={index} type="single" collapsible className="w-full">
+                      <AccordionItem value={`owner-${index}`}>
+                        <AccordionTrigger>
+                          {index === 0 ? 'Primary Owner (Responsible Party)' : `Additional Owner ${index + 1}`}
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="space-y-4 pt-4">
+                            <FormField
+                              control={form.control}
+                              name={`owners.${index}.fullName`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Full Name</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter full name" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
 
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="owner1">
-                      <AccordionTrigger>Primary Owner (Responsible Party)</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4 pt-4">
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.fullName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter full name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={form.control}
+                              name={`owners.${index}.address`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Address</FormLabel>
+                                  <FormControl>
+                                    <Textarea placeholder="Enter address" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.address"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Address</FormLabel>
-                                <FormControl>
-                                  <Textarea placeholder="Enter address" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={form.control}
+                              name={`owners.${index}.phone`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Phone</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter phone number" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.phone"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Phone</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter phone number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                            <FormField
+                              control={form.control}
+                              name={`owners.${index}.email`}
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Email</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Enter email" type="email" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
 
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.email"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter email" type="email" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                            {index === 0 && (
+                              <>
+                                <FormField
+                                  control={form.control}
+                                  name={`owners.${index}.ssn`}
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>SSN</FormLabel>
+                                      <FormControl>
+                                        <Input placeholder="Enter SSN" {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
 
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.ssn"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>SSN</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter SSN" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
+                                <FormField
+                                  control={form.control}
+                                  name={`owners.${index}.dob`}
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormLabel>Date of Birth</FormLabel>
+                                      <FormControl>
+                                        <Input type="date" {...field} />
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                              </>
                             )}
-                          />
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  ))}
 
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner1.dob"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Date of Birth</FormLabel>
-                                <FormControl>
-                                  <Input type="date" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="owner2">
-                      <AccordionTrigger>Additional Owner (Optional)</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4 pt-4">
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner2.fullName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter full name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner2.address"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Address</FormLabel>
-                                <FormControl>
-                                  <Textarea placeholder="Enter address" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner2.phone"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Phone</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter phone number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner2.email"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter email" type="email" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="owner3">
-                      <AccordionTrigger>Additional Owner (Optional)</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4 pt-4">
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner3.fullName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter full name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner3.address"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Address</FormLabel>
-                                <FormControl>
-                                  <Textarea placeholder="Enter address" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner3.phone"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Phone</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter phone number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="ownerInformation.owner3.email"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Enter email" type="email" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      form.setValue('owners', [
+                        ...form.getValues('owners'),
+                        {
+                          fullName: '',
+                          address: '',
+                          phone: '',
+                          email: '',
+                          ownerNumber: form.getValues('owners').length + 1,
+                          responsibleParty: false
+                        }
+                      ]);
+                    }}
+                  >
+                    Add Additional Owner
+                  </Button>
                 </div>
               )}
 
@@ -582,33 +483,38 @@ export default function LlcPage() {
                     <p className="text-sm mb-4">To the best of my knowledge the above information is correct.</p>
 
                     <div className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="attestation.signatures.0.signHere"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Signature</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Type your full name to sign" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {form.watch('owners').map((owner, index) => (
+                        <div key={index} className="space-y-4">
+                          <h3 className="font-medium">{owner.fullName || `Owner ${index + 1}`}</h3>
+                          <FormField
+                            control={form.control}
+                            name={`signatures.${index}.signHere`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Signature</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Type your full name to sign" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={form.control}
-                        name="attestation.signatures.0.date"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          <FormField
+                            control={form.control}
+                            name={`signatures.${index}.date`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Date</FormLabel>
+                                <FormControl>
+                                  <Input type="date" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      ))}
                     </div>
                   </div>
 
