@@ -73,6 +73,85 @@ export interface Database {
           due_date?: string | null;
           priority?: 'low' | 'medium' | 'high' | null;
         };
+      },
+      
+      business_formations: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string | null;
+          entity_name: string;
+          entity_address: string;
+          service_product_offered: string;
+          entity_type: 'LLC' | 'S-CORP' | 'C-CORP';
+          expedite: 'YES' | 'NO';
+          owners: Json;
+          signatures: Json | null;
+          user_id: string;
+          status: 'pending' | 'processing' | 'completed' | 'rejected';
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          entity_name: string;
+          entity_address: string;
+          service_product_offered: string;
+          entity_type: 'LLC' | 'S-CORP' | 'C-CORP';
+          expedite: 'YES' | 'NO';
+          owners: Json;
+          signatures?: Json | null;
+          user_id: string;
+          status?: 'pending' | 'processing' | 'completed' | 'rejected';
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          entity_name?: string;
+          entity_address?: string;
+          service_product_offered?: string;
+          entity_type?: 'LLC' | 'S-CORP' | 'C-CORP';
+          expedite?: 'YES' | 'NO';
+          owners?: Json;
+          signatures?: Json | null;
+          user_id?: string;
+          status?: 'pending' | 'processing' | 'completed' | 'rejected';
+        };
+      }
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string | null;
+          title: string;
+          description: string | null;
+          is_complete: boolean;
+          user_id: string;
+          due_date: string | null;
+          priority: 'low' | 'medium' | 'high' | null;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          title: string;
+          description?: string | null;
+          is_complete?: boolean;
+          user_id: string;
+          due_date?: string | null;
+          priority?: 'low' | 'medium' | 'high' | null;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          title?: string;
+          description?: string | null;
+          is_complete?: boolean;
+          user_id?: string;
+          due_date?: string | null;
+          priority?: 'low' | 'medium' | 'high' | null;
+        };
       };
     };
     
