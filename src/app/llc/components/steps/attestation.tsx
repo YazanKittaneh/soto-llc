@@ -1,7 +1,9 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 
 export function AttestationStep({ form }: { form: any }) {
+  const [submitting, setSubmitting] = useState(false)
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Attestation</h2>
