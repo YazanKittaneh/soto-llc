@@ -126,14 +126,14 @@ export default function LlcPage() {
         `An account exists for ${email}. Would you like to sign in to link this submission to your account?`
       );
       if (shouldLogin) {
-        const { data: { session } } = await supabase.auth.signInWithOAuth({
+        const { data } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
             redirectTo: `${window.location.origin}/llc`,
             queryParams: { login_hint: email }
           }
         });
-        return session?.user.id;
+        return data.provideruser.id;
       }
     } else {
       const shouldCreateAccount = window.confirm(
