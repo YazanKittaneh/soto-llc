@@ -9,9 +9,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/lib/supabase';
-import { useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
-export function FormNavigation({
+export interface FormNavigationRef {
+  openLoginDialog: () => void;
+}
+
+export const FormNavigation = forwardRef<FormNavigationRef, {
   step,
   totalSteps,
   prevStep,
@@ -25,11 +29,27 @@ export function FormNavigation({
   nextStep: () => void;
   isValid: boolean;
   isSubmitting: boolean;
-}) {
+}>((props, ref) => {
+  const {
+    step,
+    totalSteps,
+    prevStep,
+    nextStep,
+    isValid,
+    isSubmitting,
+  } = props;
+  
+  const dialogTriggerRef = useRef<HTMLButtonElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    openLoginDialog: () => {
+      dialogTriggerRef.current?.click();
+    }
+  }));
   return (
     <div className="flex justify-between pt-4 gap-4">
       <Dialog>
-        <DialogTrigger asChild>
+        <DialogTrigger ref={dialogTriggerRef} asChild>
           <Button variant="outline">Login</Button>
         </DialogTrigger>
         <DialogContent>
