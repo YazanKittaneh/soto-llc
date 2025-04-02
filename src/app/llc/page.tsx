@@ -107,32 +107,15 @@ export default function LlcPage() {
 //   }
 // }
 
+
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       const session = await supabase.auth.getSession();
       const userId = session.data.session?.user.id;
       
       let primaryOwnerEmail = '';
-      try {
-        primaryOwnerEmail = data.owners[0]?.email;
-        if (!primaryOwnerEmail) throw new Error('No primary owner email found');
-      } catch (error) {
-        const shouldCreateAccount = confirm(
-          `Would you like to create an account to track your submission?`
-        );
-        if (shouldCreateAccount) {
-          await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-              redirectTo: `${window.location.origin}/llc`,
-              queryParams: {
-                prompt: 'create'
-              }
-            }
-          });
-          return;
-        }
-      }
+      primaryOwnerEmail = data.owners[0]?.email;
 
       // Check if user exists by email if not logged in
       if (!userId && primaryOwnerEmail) {
@@ -203,13 +186,12 @@ export default function LlcPage() {
           signatures: formationData.signatures,
           user_id: userId || null,
           status: 'pending',
-          contact_email: primaryOwnerEmail
         })
         .select();
 
       if (error) throw error;
 
-      alert('Business formation submitted successfully!');
+      //alert('Business formation submitted successfully!');
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Failed to submit business formation. Please try again.');
