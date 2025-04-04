@@ -245,7 +245,7 @@ export default function LlcPage() {
               {/* All form fields must be inside this form element */}
               {step === 1 && <EntityInformationStep form={form} />}
               {step === 2 && <OwnerInformationStep form={form} />}
-              {step === 3 && <PreparerInformationStep form={form}  />}
+              {step === 3 && <PreparerInformationStep form={form} />}
               {step === 4 && <AttestationStep form={form} />}
 
               <FormNavigation
