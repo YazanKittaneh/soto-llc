@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { AuthError } from '@supabase/supabase-js';
 
 export default function LoginPage() {
   const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
@@ -32,8 +33,12 @@ export default function LoginPage() {
       const searchParams = new URLSearchParams(window.location.search);
       const redirectUrl = searchParams.get('redirect') || '/dashboard';
       router.push(redirectUrl);
-    } catch (error: any) {
-      setError(error.message || 'An error occurred during login');
+    } catch (error: unknown) {
+      if (error instanceof AuthError) {
+        setError(error.message || 'An error occurred during login');
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }

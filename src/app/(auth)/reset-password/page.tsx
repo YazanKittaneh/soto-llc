@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { AuthError } from '@supabase/supabase-js';
+
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState('');
@@ -26,8 +28,12 @@ export default function ResetPasswordPage() {
       }
 
       setMessage('Check your email for the password reset link');
-    } catch (error: any) {
-      setError(error.message || 'An error occurred while sending reset email');
+    } catch (error: unknown) {
+      if (error instanceof AuthError) {
+        setError(error.message || 'An error occurred while sending reset email');
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }
