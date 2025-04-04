@@ -24,6 +24,8 @@ import { FormNavigation } from './components/form-navigation';
 import { Dialog } from '@radix-ui/react-dialog';
 import LoginPage from '../(auth)/login/page';
 
+export type FormData = z.infer<typeof formSchema>;
+
 
 const formSchema = z.object({
   entityName: z.string().min(1, { message: "Entity name is required" }),
@@ -59,7 +61,6 @@ export default function LlcPage() {
   const [step, setStep] = useState(1);
   const [nextAvailable, setNextAvailable] = useState(false);
 
-
   const totalSteps = 4;
   
 
@@ -88,8 +89,8 @@ export default function LlcPage() {
   }), []);
 
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema) as any,
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues,
     mode: 'onBlur', // Change to onBlur to reduce validation frequency
   });
