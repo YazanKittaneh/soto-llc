@@ -34,7 +34,7 @@ export default function DashboardPage() {
         
         // Check if user is admin
         const { data: userData } = await supabase
-          .from('profiles')
+          .from('users')
           .select('is_admin')
           .eq('id', session.user.id)
           .single();
