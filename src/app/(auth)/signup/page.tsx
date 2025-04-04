@@ -58,23 +58,31 @@ export default function SignUpPage() {
         throw authError;
       }
 
-      // Create user record after successful auth signup
-      if (authData.user) {
-        const { error: userError } = await supabase
-          .from('users')
-          .insert({
-            id: authData.user.id,
-            email: authData.user.email!,
-            full_name: fullName,
-            is_admin: false,
-            created_at: new Date().toISOString()
-          });
+      // If email confirmation is required, show success message
+      if (authData.user?.identities?.length === 0) {
+        setMessage('Check your email for confirmation link');
+        setLoading(false);
+        return;
+      }
 
-        if (userError) {
-          // Rollback auth signup if user creation fails
-          await supabase.auth.admin.deleteUser(authData.user.id);
-          throw userError;
-        }
+      // Create user profile using service endpoint
+      const createUserResponse = await fetch('/api/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: authData.user?.id,
+          email,
+          full_name: fullName,
+        }),
+      });
+
+      if (!createUserResponse.ok) {
+        const errorData = await createUserResponse.json();
+        // Rollback auth user if profile creation fails
+        await supabase.auth.admin.deleteUser(authData.user?.id!);
+        throw new Error(errorData.error || 'Failed to create user profile');
       }
 
       // Redirect to original URL or show success message
@@ -97,9 +105,11 @@ export default function SignUpPage() {
       setMessage('Check your email for the confirmation link');
     } catch (error: unknown) {
       if (error instanceof AuthError) {
-        setError(error.message || 'An error occurred during sign up');
+        setError(error.message);
+      } else if (error instanceof Error) {
+        setError(error.message);
       } else {
-        setError('An unexpected error occurred');
+        setError('An unexpected error occurred during sign up');
       }
     } finally {
       setLoading(false);
