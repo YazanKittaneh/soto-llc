@@ -111,46 +111,7 @@ export default function LlcPage() {
 
 
 
-  const handleAuth = async (email: string) => {
-    const session = await supabase.auth.getSession();
-    const userId = session.data.session?.user.id;
-    
-    if (userId) return userId;
-
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', email)
-      .single();
-
-    if (existingUser) {
-      const shouldLogin = window.confirm(
-        `An account exists for ${email}. Would you like to sign in to link this submission to your account?`
-      );
-      if (shouldLogin) {
-        // Redirect to login page with return URL
-        window.location.href = `/login?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
-        return null;
-      }
-    } else {
-      const shouldCreateAccount = window.confirm(
-        `Would you like to create an account with ${email} to track your submission?`
-      );
-      if (shouldCreateAccount) {
-        // Redirect to signup page with email prefilled
-        return (
-          <>
-          <Dialog>
-            <LoginPage></LoginPage>
-          </Dialog>
-          </>
-        )
-        //window.location.href = `/signup?redirect=${encodeURIComponent('/llc')}&email=${encodeURIComponent(email)}`;
-        //return null;
-      }
-    }
-    return null;
-  };
+  // Removed unused handleAuth function
 
 
 
