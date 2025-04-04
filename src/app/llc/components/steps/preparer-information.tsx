@@ -2,11 +2,9 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Checkbox } from '@/components/ui/checkbox';
 import { FieldValues, UseFormReturn } from 'react-hook-form';
 
-interface PreparerInformationStepProps<T extends FieldValues> {
-  form: UseFormReturn<T>;
-}
 
-export function PreparerInformationStep<T extends FieldValues>({ form }: PreparerInformationStepProps<T>) {
+
+export function PreparerInformationStep({ form }: { form: any }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Preparer Information</h2>
