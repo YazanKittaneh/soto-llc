@@ -156,7 +156,6 @@ export default function LlcPage() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const primaryOwnerEmail = data.owners[0]?.email;
       const userId = await (await supabase.auth.getSession()).data.session?.user.id;
 
       // Submit the form data
