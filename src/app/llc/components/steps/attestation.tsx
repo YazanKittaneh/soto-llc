@@ -2,9 +2,8 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
 
-export function AttestationStep({ form }: { form: any }) {
-  //const [submitting, setSubmitting] = useState(false)
-  const submitting = false;
+export function AttestationStep({ form, onSubmit }: { form: any; onSubmit: () => void }) {
+  const [submitting, setSubmitting] = useState(false);
   return (
     <div className="space-y-6 relative">
       {submitting && (
@@ -12,6 +11,29 @@ export function AttestationStep({ form }: { form: any }) {
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       )}
+
+      <Button 
+        type="button"
+        onClick={async () => {
+          setSubmitting(true);
+          try {
+            await onSubmit();
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+        disabled={submitting}
+        className="w-full mt-6"
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          'Submit Application'
+        )}
+      </Button>
       <h2 className="text-xl font-semibold">Attestation</h2>
 
       <div className="bg-gray-50 p-4 rounded-md">

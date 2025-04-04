@@ -197,17 +197,18 @@ export default function LlcPage() {
               {step === 1 && <EntityInformationStep form={form} />}
               {step === 2 && <OwnerInformationStep form={form} />}
               {step === 3 && <PreparerInformationStep form={form} />}
-              {step === 4 && <AttestationStep form={form} />}
+              {step === 4 && <AttestationStep form={form} onSubmit={form.handleSubmit(onSubmit)} />}
 
-              <FormNavigation
-              
-                step={step}
-                totalSteps={totalSteps}
-                prevStep={prevStep}
-                nextStep={nextStep}
-                isValid={nextAvailable}
-                isSubmitting={form.formState.isSubmitting}
-              />
+              {step < 4 && (
+                <FormNavigation
+                  step={step}
+                  totalSteps={totalSteps}
+                  prevStep={prevStep}
+                  nextStep={nextStep}
+                  isValid={nextAvailable}
+                  isSubmitting={form.formState.isSubmitting}
+                />
+              )}
             </form>
           </Form>
         </CardContent>
