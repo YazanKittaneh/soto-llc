@@ -9,6 +9,7 @@ import { AuthError } from '@supabase/supabase-js';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -22,9 +23,21 @@ export default function SignUpPage() {
     setError(null);
     setMessage(null);
 
-    // Validate password match
+    // Validate inputs
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      setLoading(false);
+      return;
+    }
+
+    if (!fullName) {
+      setError('Full name is required');
       setLoading(false);
       return;
     }
@@ -52,7 +65,9 @@ export default function SignUpPage() {
           .insert({
             id: authData.user.id,
             email: authData.user.email!,
-            is_admin: false // Default to non-admin
+            full_name: fullName,
+            is_admin: false,
+            created_at: new Date().toISOString()
           });
 
         if (userError) {
@@ -114,6 +129,22 @@ export default function SignUpPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSignUp}>
           <div className="space-y-4">
+            <div>
+              <label htmlFor="full-name" className="sr-only">
+                Full Name
+              </label>
+              <input
+                id="full-name"
+                name="full-name"
+                type="text"
+                autoComplete="name"
+                required
+                className="relative block w-full rounded-md border-0 px-2 py-1.5 ring-1 ring-inset focus:z-10 focus:ring-2"
+                placeholder="Full Name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
