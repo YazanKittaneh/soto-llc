@@ -8,13 +8,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { BusinessOwner } from '@/types/llc';
+import { UseFormReturn } from 'react-hook-form';
 
-export function OwnerInformationStep({ form }: { form: any }) {
+interface OwnerInformationStepProps{
+  form: UseFormReturn;
+}
+
+export function OwnerInformationStep({ form }: OwnerInformationStepProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Owner Information</h2>
       
-      {form.watch('owners').map((owner: any, index: number) => (
+      {form.watch('owners').map((owner: BusinessOwner, index: number) => (
         <Accordion key={index} type="single" collapsible className="w-full">
           <AccordionItem value={`owner-${index}`}>
             <AccordionTrigger>

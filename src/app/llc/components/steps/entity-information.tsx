@@ -4,8 +4,11 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { FormData } from '../../page';
+import { Control, FieldValues, UseFormReturn } from 'react-hook-form';
 
-export function EntityInformationStep({ form }: { form: any }) {
+
+export function EntityInformationStep(form: { control: Control<FieldValues, any, FieldValues> | undefined; }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Entity Information</h2>
