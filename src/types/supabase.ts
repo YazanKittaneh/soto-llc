@@ -164,14 +164,11 @@ export interface Database {
   };
 };
 
-export type Tables<T extends keyof Database['public']['Tables']> =
-  Database['public']['Tables']['business_formations']['Row'];
+export type Tables = Database['public']['Tables']['business_formations']['Row'];
 
-export type InsertTables<T extends keyof Database['public']['Tables']> =
-  Database['public']['Tables']['business_formations']['Insert'];
+export type InsertTables = Database['public']['Tables']['business_formations']['Insert'];
 
-export type UpdateTables<T extends keyof Database['public']['Tables']> =
-  Database['public']['Tables']['business_formations']['Update'];
+export type UpdateTables = Database['public']['Tables']['business_formations']['Update'];
 
 // Auth types
 export type UserMetadata = {
