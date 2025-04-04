@@ -7,10 +7,14 @@ const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  rules: {
+    'react/no-unescaped-entities': 0
+  }
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier', 'plugin:@next/next/recommended'),
+
 ];
 
 export default eslintConfig;
