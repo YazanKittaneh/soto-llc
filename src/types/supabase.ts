@@ -18,6 +18,7 @@ export interface Database {
           avatar_url: string | null;
           website: string | null;
           user_id: string;
+          is_admin: boolean;
         };
         Insert: {
           id?: string;
@@ -27,6 +28,7 @@ export interface Database {
           avatar_url?: string | null;
           website?: string | null;
           user_id: string;
+          is_admin?: boolean;
         };
         Update: {
           id?: string;
@@ -36,6 +38,7 @@ export interface Database {
           avatar_url?: string | null;
           website?: string | null;
           user_id?: string;
+          is_admin?: boolean;
         };
       };
 

@@ -8,7 +8,8 @@ import {
   LucideSettings, 
   LucideUser, 
   LucideLogOut,
-  LucideFileText 
+  LucideFileText,
+  LucideShield
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 import type { BusinessFormation } from '@/types/llc';
@@ -99,10 +100,16 @@ export default function DashboardPage() {
               Settings
             </a>
             {isAdmin && (
-              <a href="#submissions" className="flex items-center rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
-                <LucideFileText className="mr-3 h-5 w-5" />
-                Submissions
-              </a>
+              <>
+                <a href="#submissions" className="flex items-center rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
+                  <LucideFileText className="mr-3 h-5 w-5" />
+                  Submissions
+                </a>
+                <a href="#admin" className="flex items-center rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
+                  <LucideShield className="mr-3 h-5 w-5" />
+                  Admin Tools
+                </a>
+              </>
             )}
           </nav>
           <div className="border-t p-4">
@@ -209,6 +216,32 @@ export default function DashboardPage() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {isAdmin && (
+              <div className="mt-8 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800" id="admin">
+                <h2 className="mb-4 text-xl font-bold">Admin Tools</h2>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div className="rounded-lg border p-4">
+                    <h3 className="mb-2 font-semibold">User Management</h3>
+                    <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                      View and manage all users
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      Manage Users
+                    </Button>
+                  </div>
+                  <div className="rounded-lg border p-4">
+                    <h3 className="mb-2 font-semibold">System Settings</h3>
+                    <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                      Configure application settings
+                    </p>
+                    <Button variant="outline" className="w-full">
+                      System Settings
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
