@@ -3,12 +3,21 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { LucideHome, LucideSettings, LucideUser, LucideLogOut } from 'lucide-react';
+import { 
+  LucideHome, 
+  LucideSettings, 
+  LucideUser, 
+  LucideLogOut,
+  LucideFileText 
+} from 'lucide-react';
 import { User } from '@supabase/supabase-js';
+import type { BusinessFormation } from '@/types/llc';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [submissions, setSubmissions] = useState<BusinessFormation[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,6 +30,25 @@ export default function DashboardPage() {
         }
         
         setUser(session.user);
+        
+        // Check if user is admin
+        const { data: userData } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', session.user.id)
+          .single();
+          
+        setIsAdmin(userData?.is_admin || false);
+        
+        // Fetch submissions if admin
+        if (userData?.is_admin) {
+          const { data: submissionsData } = await supabase
+            .from('business_formations')
+            .select('*')
+            .order('created_at', { ascending: false });
+            
+          setSubmissions(submissionsData || []);
+        }
       } catch (error) {
         console.error('Error getting user:', error);
         router.push('/login');
@@ -70,6 +98,12 @@ export default function DashboardPage() {
               <LucideSettings className="mr-3 h-5 w-5" />
               Settings
             </a>
+            {isAdmin && (
+              <a href="#submissions" className="flex items-center rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
+                <LucideFileText className="mr-3 h-5 w-5" />
+                Submissions
+              </a>
+            )}
           </nav>
           <div className="border-t p-4">
             <button
@@ -146,6 +180,38 @@ export default function DashboardPage() {
                 ))}
               </ul>
             </div>
+            
+            {isAdmin && submissions.length > 0 && (
+              <div className="mt-8 rounded-lg bg-white p-6 shadow-md dark:bg-gray-800" id="submissions">
+                <h2 className="mb-4 text-xl font-bold">Business Formation Submissions</h2>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Entity Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Type</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Submitted</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                      {submissions.map((submission) => (
+                        <tr key={submission.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="whitespace-nowrap px-6 py-4 text-sm">{submission.id}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                            {submission.entity_name}
+                          </td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm">{submission.entity_type}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm">
+                            {new Date(submission.created_at).toLocaleString()}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
