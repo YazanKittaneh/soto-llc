@@ -13,7 +13,6 @@ export function FormNavigation({
   totalSteps,
   prevStep,
   nextStep,
-  isValid,
   isSubmitting,
 }: {
   step: number;

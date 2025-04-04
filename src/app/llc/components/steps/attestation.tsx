@@ -1,10 +1,10 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export function AttestationStep({ form }: { form: any }) {
-  const [submitting, setSubmitting] = useState(false)
+  //const [submitting, setSubmitting] = useState(false)
+  const submitting = false;
   return (
     <div className="space-y-6 relative">
       {submitting && (

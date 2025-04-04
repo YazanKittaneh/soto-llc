@@ -1,19 +1,11 @@
 "use client";
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { FormData } from '../../page';
-import { FieldValues, UseFormReturn, Path } from 'react-hook-form';
-import { FormData } from '../../page';
 
 
-interface EntityInformationStepProps {
-  form: UseFormReturn<FormData>;
-}
-
-export function EntityInformationStep({ form }: EntityInformationStepProps) {
+export function EntityInformationStep({ form }: { form: any }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Entity Information</h2>

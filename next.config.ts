@@ -18,10 +18,10 @@ const nextConfig: NextConfig = {
       // Any custom Turbopack configuration would go here
     },
     // Server components features
-    serverComponentsExternalPackages: [],
     // Other experimental features you might want to enable
     // mdxRs: true,
   },
+//  serverComponentsExternal: ['@tremor/react'],
   // Customize headers, rewrites or redirects if needed
   headers: async () => {
     return [

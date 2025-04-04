@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import { AuthError } from '@supabase/supabase-js';
+
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -58,8 +60,12 @@ export default function SignUpPage() {
       }
 
       setMessage('Check your email for the confirmation link');
-    } catch (error: any) {
-      setError(error.message || 'An error occurred during sign up');
+    } catch (error: unknown) {
+      if (error instanceof AuthError) {
+        setError(error.message || 'An error occurred during sign up');
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }

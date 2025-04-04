@@ -176,7 +176,7 @@ export type UserMetadata = {
   avatar_url?: string;
 };
 
-export interface UserProfile extends Tables<'profiles'> {
+export interface UserProfile extends Tables {
   auth_user?: {
     email: string;
   };

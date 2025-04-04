@@ -1,5 +1,4 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { FormData } from '../../page';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -10,14 +9,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { BusinessOwner } from '@/types/llc';
-import { UseFormReturn } from 'react-hook-form';
-import { FormData } from '../../page';
 
-interface OwnerInformationStepProps {
-  form: UseFormReturn<FormData>;
-}
-
-export function OwnerInformationStep({ form }: OwnerInformationStepProps) {
+export function OwnerInformationStep({ form }: { form: any }) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Owner Information</h2>

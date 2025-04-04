@@ -20,8 +20,6 @@ import { OwnerInformationStep } from './components/steps/owner-information';
 import { PreparerInformationStep } from './components/steps/preparer-information';
 import { AttestationStep } from './components/steps/attestation';
 import { FormNavigation } from './components/form-navigation';
-import { Dialog } from '@radix-ui/react-dialog';
-import LoginPage from '../(auth)/login/page';
 
 export type FormData = z.infer<typeof formSchema>;
 

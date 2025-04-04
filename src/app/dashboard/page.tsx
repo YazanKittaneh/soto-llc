@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { LucideHome, LucideSettings, LucideUser, LucideLogOut } from 'lucide-react';
+import { User } from '@supabase/supabase-js';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 

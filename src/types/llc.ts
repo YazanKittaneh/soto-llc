@@ -87,5 +87,5 @@ export interface Database {
   };
 }
 
-export type BusinessFormation = Tables<'business_formations'>;
-export type InsertBusinessFormation = InsertTables<'business_formations'>;
+export type BusinessFormation = Tables;
+export type InsertBusinessFormation = InsertTables;
