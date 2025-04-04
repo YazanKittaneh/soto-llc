@@ -44,6 +44,17 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: '/',
+        destination: '/llc',
+        permanent: true,
+      },
+      // Wildcard path matching
+    ]
+  },
   // Configure redirects/rewrites as needed
   // rewrites: async () => [],
   // redirects: async () => [],
