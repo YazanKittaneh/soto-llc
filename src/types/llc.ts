@@ -36,57 +36,55 @@ export interface NewBusinessFormation {
 }
 
 // For Supabase table types
-declare global {
-  namespace Database {
-    interface Public {
-      Tables: {
-        business_formations: {
-          Row: {
-            id: string;
-            created_at: string;
-            updated_at: string | null;
-            entity_name: string;
-            entity_address: string;
-            service_product_offered: string;
-            entity_type: EntityType;
-            expedite: ExpediteOption;
-            owners: BusinessOwner;
-            signatures: Json | null;
-            user_id: string;
-            status: 'pending' | 'processing' | 'completed' | 'rejected';
-          };
-          Insert: {
-            id?: string;
-            created_at?: string;
-            updated_at?: string | null;
-            entity_name: string;
-            entity_address: string;
-            service_product_offered: string;
-            entity_type: EntityType;
-            expedite: ExpediteOption;
-            owners: BusinessOwner;
-            signatures?: Json | null;
-            user_id?: string;
-            status?: 'pending' | 'processing' | 'completed' | 'rejected';
-          };
-          Update: {
-            id?: string;
-            created_at?: string;
-            updated_at?: string | null;
-            entity_name?: string;
-            entity_address?: string;
-            service_product_offered?: string;
-            entity_type?: EntityType;
-            expedite?: ExpediteOption;
-            owners?: BusinessOwner;
-            signatures?: Json | null;
-            user_id?: string;
-            status?: 'pending' | 'processing' | 'completed' | 'rejected';
-          };
+export interface Database {
+  public: {
+    Tables: {
+      business_formations: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string | null;
+          entity_name: string;
+          entity_address: string;
+          service_product_offered: string;
+          entity_type: EntityType;
+          expedite: ExpediteOption;
+          owners: BusinessOwner;
+          signatures: Json | null;
+          user_id: string;
+          status: 'pending' | 'processing' | 'completed' | 'rejected';
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          entity_name: string;
+          entity_address: string;
+          service_product_offered: string;
+          entity_type: EntityType;
+          expedite: ExpediteOption;
+          owners: BusinessOwner;
+          signatures?: Json | null;
+          user_id?: string;
+          status?: 'pending' | 'processing' | 'completed' | 'rejected';
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string | null;
+          entity_name?: string;
+          entity_address?: string;
+          service_product_offered?: string;
+          entity_type?: EntityType;
+          expedite?: ExpediteOption;
+          owners?: BusinessOwner;
+          signatures?: Json | null;
+          user_id?: string;
+          status?: 'pending' | 'processing' | 'completed' | 'rejected';
         };
       };
-    }
-  }
+    };
+  };
 }
 
 export type BusinessFormation = Tables<'business_formations'>;
