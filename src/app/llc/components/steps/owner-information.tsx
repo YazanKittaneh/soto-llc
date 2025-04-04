@@ -11,11 +11,11 @@ import {
 import { BusinessOwner } from '@/types/llc';
 import { UseFormReturn } from 'react-hook-form';
 
-interface OwnerInformationStepProps{
-  form: UseFormReturn;
+interface OwnerInformationStepProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
 }
 
-export function OwnerInformationStep({ form }: OwnerInformationStepProps) {
+export function OwnerInformationStep<T extends FieldValues>({ form }: OwnerInformationStepProps<T>) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Owner Information</h2>

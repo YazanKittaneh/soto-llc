@@ -8,7 +8,11 @@ import { FormData } from '../../page';
 import { Control, FieldValues, UseFormReturn } from 'react-hook-form';
 
 
-export function EntityInformationStep(form: { control: Control<FieldValues, any, FieldValues> | undefined; }) {
+interface EntityInformationStepProps<T extends FieldValues> {
+  form: UseFormReturn<T>;
+}
+
+export function EntityInformationStep<T extends FieldValues>({ form }: EntityInformationStepProps<T>) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Entity Information</h2>
