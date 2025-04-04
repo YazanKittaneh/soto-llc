@@ -15,7 +15,6 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { NewBusinessFormation } from '@/types/llc';
 import { EntityInformationStep } from './components/steps/entity-information';
 import { OwnerInformationStep } from './components/steps/owner-information';
 import { PreparerInformationStep } from './components/steps/preparer-information';
