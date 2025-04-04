@@ -16,6 +16,8 @@ export interface Database {
           updated_at: string | null;
           email: string;
           is_admin: boolean;
+          full_name?: string | null;
+          avatar_url?: string | null;
         };
         Insert: {
           id?: string;

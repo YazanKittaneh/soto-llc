@@ -30,16 +30,36 @@ export default function SignUpPage() {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            email // Include email in auth user metadata
+          }
         },
       });
 
-      if (error) {
-        throw error;
+      if (authError) {
+        throw authError;
+      }
+
+      // Create user record after successful auth signup
+      if (authData.user) {
+        const { error: userError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            email: authData.user.email!,
+            is_admin: false // Default to non-admin
+          });
+
+        if (userError) {
+          // Rollback auth signup if user creation fails
+          await supabase.auth.admin.deleteUser(authData.user.id);
+          throw userError;
+        }
       }
 
       // Redirect to original URL or show success message
