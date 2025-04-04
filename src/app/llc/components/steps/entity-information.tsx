@@ -5,14 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FormData } from '../../page';
-import { Control, FieldValues, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn, Path } from 'react-hook-form';
+import { FormData } from '../../page';
 
 
-interface EntityInformationStepProps<T extends FieldValues> {
-  form: UseFormReturn<T>;
+interface EntityInformationStepProps {
+  form: UseFormReturn<FormData>;
 }
 
-export function EntityInformationStep<T extends FieldValues>({ form }: EntityInformationStepProps<T>) {
+export function EntityInformationStep({ form }: EntityInformationStepProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold">Entity Information</h2>
