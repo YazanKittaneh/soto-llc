@@ -50,7 +50,7 @@ export function FormNavigation({
       ) : (
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isValid}
         >
           {isSubmitting ? (
             <>

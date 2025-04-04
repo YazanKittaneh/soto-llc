@@ -135,15 +135,9 @@ export default function LlcPage() {
         .insert(formationData);
 
       if (error) throw error;
-
-      // const confirmed = window.confirm(
-      //   'Business formation submitted successfully!\n\n' +
-      //   'Would you like to view your submissions?'
-      // );
       
-      // if (confirmed) {
-      //   window.location.href = userId ? '/dashboard' : '/';
-      // }
+      // Redirect to submission complete page
+      window.location.href = '/llc/submission-complete';
     } catch (error) {
       console.error('Error submitting form:', error);
       //alert('Failed to submit business formation. Please try again
