@@ -1,6 +1,8 @@
+import { Button } from '@/components/ui/button';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 
 export function AttestationStep({ form, onSubmit }: { form: any; onSubmit: () => void }) {
   const [submitting, setSubmitting] = useState(false);
@@ -12,28 +14,7 @@ export function AttestationStep({ form, onSubmit }: { form: any; onSubmit: () =>
         </div>
       )}
 
-      <Button 
-        type="button"
-        onClick={async () => {
-          setSubmitting(true);
-          try {
-            await onSubmit();
-          } finally {
-            setSubmitting(false);
-          }
-        }}
-        disabled={submitting}
-        className="w-full mt-6"
-      >
-        {submitting ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Submitting...
-          </>
-        ) : (
-          'Submit Application'
-        )}
-      </Button>
+
       <h2 className="text-xl font-semibold">Attestation</h2>
 
       <div className="bg-gray-50 p-4 rounded-md">
@@ -74,6 +55,28 @@ export function AttestationStep({ form, onSubmit }: { form: any; onSubmit: () =>
           ))}
         </div>
       </div>
+      <Button
+        type="button"
+        onClick={async () => {
+          setSubmitting(true);
+          try {
+            await onSubmit();
+          } finally {
+            setSubmitting(false);
+          }
+        }}
+        disabled={submitting}
+        className="mt-6 "
+      >
+        {submitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          'Submit Application'
+        )}
+      </Button>
 
       <div className="bg-gray-50 p-4 rounded-md">
         <h3 className="text-lg font-medium mb-2">Contact Information</h3>

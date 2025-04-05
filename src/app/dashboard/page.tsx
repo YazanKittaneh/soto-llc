@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { User } from '@supabase/supabase-js';
 import type { BusinessFormation } from '@/types/llc';
+import { Button } from '@/components/ui/button';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User>();

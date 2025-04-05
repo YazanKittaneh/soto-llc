@@ -1,18 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 
 export function FormNavigation({
   step,
   totalSteps,
   prevStep,
   nextStep,
+  isValid,
   isSubmitting,
 }: {
   step: number;
@@ -24,16 +18,6 @@ export function FormNavigation({
 }) {
   return (
     <div className="flex justify-between pt-4 gap-4">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Login</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Login</DialogTitle>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
       {step > 1 && (
         <Button type="button" variant="outline" onClick={prevStep}>
           Previous
@@ -43,7 +27,7 @@ export function FormNavigation({
         <Button
           type="button"
           onClick={nextStep}
-          disabled={false}
+          disabled={isValid}
         >
           Next
         </Button>
