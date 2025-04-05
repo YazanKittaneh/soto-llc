@@ -25,7 +25,7 @@ export default function SubmissionComplete() {
         <CardContent>
           <div className="space-y-4">
             <p>
-              We've received your application and will process it shortly. You'll 
+              We&apos;ve received your application and will process it shortly. You&apos;ll 
               receive an email confirmation with next steps.
             </p>
             <div className="flex gap-4 pt-4">
