@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   const { id, email, full_name } = await request.json();
 
   try {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('users')
       .insert({
         id,
@@ -13,12 +13,18 @@ export async function POST(request: Request) {
         full_name,
         is_admin: false,
         created_at: new Date().toISOString()
-      });
+      })
+      .select()
+      .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, user: data });
   } catch (error) {
+    console.error('Failed to create user profile:', error);
     return NextResponse.json(
       { error: 'Failed to create user profile' },
       { status: 500 }
