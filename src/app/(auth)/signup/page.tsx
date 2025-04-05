@@ -81,7 +81,9 @@ export default function SignUpPage() {
       if (!createUserResponse.ok) {
         const errorData = await createUserResponse.json();
         // Rollback auth user if profile creation fails
-        await supabase.auth.admin.deleteUser(authData.user?.id!);
+        if (authData.user?.id) {
+          await supabase.auth.admin.deleteUser(authData.user.id);
+        }
         throw new Error(errorData.error || 'Failed to create user profile');
       }
 
